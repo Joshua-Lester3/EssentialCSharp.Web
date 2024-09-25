@@ -1,20 +1,23 @@
+using EssentialCSharp.Web.Areas.Identity.Data;
 using EssentialCSharp.Web.Extensions;
 using EssentialCSharp.Web.Models;
 using EssentialCSharp.Web.Services;
 using HtmlAgilityPack;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 
 namespace EssentialCSharp.Web.Controllers;
 
-public class HomeController : Controller
+public class HomeController : BaseController
 {
     private readonly IConfiguration _Configuration;
     private readonly IWebHostEnvironment _HostingEnvironment;
     private readonly ISiteMappingService _SiteMappingService;
     private readonly ILogger<HomeController> _Logger;
 
-    public HomeController(ILogger<HomeController> logger, IWebHostEnvironment hostingEnvironment, ISiteMappingService siteMappingService, IConfiguration configuration)
+    public HomeController(ILogger<HomeController> logger, IWebHostEnvironment hostingEnvironment, ISiteMappingService siteMappingService, IConfiguration configuration, IReferralService referralService, UserManager<EssentialCSharpWebUser> userManager)
+        : base(referralService, userManager)
     {
         _Logger = logger;
         _HostingEnvironment = hostingEnvironment;

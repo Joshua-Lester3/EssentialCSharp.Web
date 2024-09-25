@@ -4,6 +4,7 @@
 @using IntelliTect.Multitool
 @using EssentialCSharp.Common
 @inject ISiteMappingService _SiteMappings
+@inject IReferralService _ReferralService
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -300,6 +301,9 @@
             PREVIOUS_PAGE = @Json.Serialize(ViewBag.PreviousPage)
             NEXT_PAGE = @Json.Serialize(ViewBag.NextPage)
             TOC_DATA = @Json.Serialize(tocData)
+
+            // Set query parameter
+            REFERRER_ID = @ViewData["rid"]?.ToString();
     </script>
 
     @* Recursive vue component template for rendering the table of contents. *@
