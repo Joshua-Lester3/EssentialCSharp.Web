@@ -124,7 +124,8 @@
                         <span v-cloak>{{chapterParentPage.title}}</span>
                     </a>
                     <div class="menu-chapter-title text-light">
-                        {{currentPageCount}} / {{totalPageCount}}
+                        <form 
+                        <span v-cloak>{{currentPageCount}} / {{totalPageCount}}</span>
                     </div>
 
                     <div class="d-flex align-items-center">
@@ -296,9 +297,13 @@
                 Items = GetItems(x, 1)
             });
             var groupedTocData = _SiteMappings.SiteMappings.GroupBy(x => x.ChapterNumber).OrderBy(x => x.Key);
-            int currentPageCount = 0;
-            int overallCount = 0;
+            int currentPageCount = 1;
+            int overallCount = 1;
             bool currentPageFound = false;
+            List<string> keyList = new();
+
+            // Loop through each SiteMapping and increment the overallCount, 
+            // currentPageFound (until you reach it), and build keyList out
             foreach (IGrouping<int, SiteMapping> group in groupedTocData)
             {
                 var orderedGroup = group.OrderBy(x => x.PageNumber);
@@ -312,12 +317,14 @@
                     {
                         currentPageCount++;
                     }
+                    keyList.Add(siteMapping.Key);
                     overallCount++;
                 }
             }
         }
             CURRENT_PAGE_COUNT = @Json.Serialize(currentPageCount)
             TOTAL_PAGE_COUNT = @Json.Serialize(overallCount)
+            KEY_LIST = @Json.Serialize(keyList)
             PREVIOUS_PAGE = @Json.Serialize(ViewBag.PreviousPage)
                 NEXT_PAGE = @Json.Serialize(ViewBag.NextPage)
                     TOC_DATA = @Json.Serialize(tocData)

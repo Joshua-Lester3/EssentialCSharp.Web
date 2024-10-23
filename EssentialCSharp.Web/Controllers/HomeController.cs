@@ -53,6 +53,8 @@ public class HomeController : Controller
         }
     }
 
+
+
     [Route("/TermsOfService",
        Name = "TermsOfService")]
     public IActionResult TermsOfService()
