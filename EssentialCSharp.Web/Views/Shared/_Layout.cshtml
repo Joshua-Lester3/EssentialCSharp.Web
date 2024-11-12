@@ -124,7 +124,6 @@
                         <span v-cloak>{{chapterParentPage.title}}</span>
                     </a>
                     <div class="menu-chapter-title text-light">
-                        <form 
                         <span v-cloak>{{currentPageCount}} / {{totalPageCount}}</span>
                     </div>
 
@@ -296,7 +295,7 @@
                 Title = $"Chapter {x.Key}: {x.First().ChapterTitle}",
                 Items = GetItems(x, 1)
             });
-            var groupedTocData = _SiteMappings.SiteMappings.GroupBy(x => x.ChapterNumber).OrderBy(x => x.Key);
+            var groupedTocData = _SiteMappings.SiteMappings.DistinctBy(x => (x.ChapterNumber, x.PageNumber)).GroupBy(x => x.ChapterNumber).OrderBy(x => x.Key);
             int currentPageCount = 1;
             int overallCount = 1;
             bool currentPageFound = false;
