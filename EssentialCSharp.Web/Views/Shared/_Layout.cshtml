@@ -123,8 +123,8 @@
                     <a v-if="chapterParentPage" :href="chapterParentPage.href" class="menu-chapter-title text-light">
                         <span v-cloak>{{chapterParentPage.title}}</span>
                     </a>
-                    <div class="menu-chapter-title text-light">
-                        <span v-cloak>{{currentPageCount}} / {{totalPageCount}}</span>
+                    <div class="menu-chapter-title text-light" v-if="isContentPage">
+                        <span v-cloak>Progress: {{percentComplete}}%</span>
                     </div>
 
                     <div class="d-flex align-items-center">
@@ -295,35 +295,10 @@
                 Title = $"Chapter {x.Key}: {x.First().ChapterTitle}",
                 Items = GetItems(x, 1)
             });
-            var groupedTocData = _SiteMappings.SiteMappings.DistinctBy(x => (x.ChapterNumber, x.PageNumber)).GroupBy(x => x.ChapterNumber).OrderBy(x => x.Key);
-            int currentPageCount = 1;
-            int overallCount = 1;
-            bool currentPageFound = false;
-            List<string> keyList = new();
 
-            // Loop through each SiteMapping and increment the overallCount, 
-            // currentPageFound (until you reach it), and build keyList out
-            foreach (IGrouping<int, SiteMapping> group in groupedTocData)
-            {
-                var orderedGroup = group.OrderBy(x => x.PageNumber);
-                foreach (SiteMapping siteMapping in orderedGroup)
-                {
-                    if (siteMapping.Key == ViewBag.CurrentPageKey)
-                    {
-                        currentPageFound = true;
-                    }
-                    if (!currentPageFound)
-                    {
-                        currentPageCount++;
-                    }
-                    keyList.Add(siteMapping.Key);
-                    overallCount++;
-                }
-            }
+            var percentComplete = _SiteMappings.GetPercentComplete(ViewBag.CurrentPageKey);
         }
-            CURRENT_PAGE_COUNT = @Json.Serialize(currentPageCount)
-            TOTAL_PAGE_COUNT = @Json.Serialize(overallCount)
-            KEY_LIST = @Json.Serialize(keyList)
+            PERCENT_COMPLETE = @Json.Serialize(percentComplete);
             PREVIOUS_PAGE = @Json.Serialize(ViewBag.PreviousPage)
                 NEXT_PAGE = @Json.Serialize(ViewBag.NextPage)
                     TOC_DATA = @Json.Serialize(tocData)
